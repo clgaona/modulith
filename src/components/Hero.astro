@@ -1,0 +1,19 @@
+---
+import HeroVisual from './HeroVisual.astro';
+import { heroHeadlines, homeCopy, type HeadlineId } from '../config/site';
+interface Props { headline: HeadlineId }
+const { headline } = Astro.props;
+---
+<section class="hero container" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Vivienda personalizada · Colombia</p>
+    <h1 id="hero-title">{heroHeadlines[headline]}</h1>
+    <p class="hero-description">{homeCopy.intro}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#preview-pendientes">{homeCopy.primaryCta}<span aria-hidden="true">↗</span></a>
+      <a class="text-link" href="#preview-pendientes">{homeCopy.secondaryCta}<span aria-hidden="true">→</span></a>
+    </div>
+    <p class="hero-note">Un proyecto propio. Un camino acompañado.</p>
+  </div>
+  <HeroVisual />
+</section>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { directions, heroHeadlines, type DirectionId, type HeadlineId } from '../../config/site';
+import { variantUrl } from '../../lib/preview';
+---
+<BaseLayout title="Modulith · Comparación visual">
+  <header class="container review-header"><a class="wordmark" href="/">modulith<span aria-hidden="true">.</span></a><span class="eyebrow">Preview visual · Fase 2</span></header>
+  <main id="contenido" class="container review-main">
+    <p class="eyebrow">Dos direcciones. Tres maneras de empezar.</p>
+    <h1>La misma casa.<br />Distintas primeras impresiones.</h1>
+    <p class="review-intro">Compara tipografía, color y titular sobre la misma estructura, el mismo croquis y el mismo contenido. Ninguna variante es definitiva.</p>
+    <div class="review-grid">
+      {Object.entries(directions).map(([direction, value]) => <section class={`direction-card ${direction}`} aria-labelledby={`direction-${direction}`}>
+        <div class="direction-swatch" aria-hidden="true"><span>Aa</span><div><i></i><i></i><i></i></div></div>
+        <h2 id={`direction-${direction}`}>{value.name}</h2><p>{value.description}</p>
+        <nav aria-label={`Titulares en ${value.name}`}>
+          {Object.entries(heroHeadlines).map(([headline, text], index) => <a href={variantUrl(direction as DirectionId, headline as HeadlineId)}><span>0{index + 1}</span><strong>{text}</strong><span aria-hidden="true">↗</span></a>)}
+        </nav>
+      </section>)}
+    </div>
+    <div class="review-notes"><h2>Qué revisar</h2><p>Abre cada variante en desktop y móvil. Evalúa el titular, los CTA, el croquis y cómo el sistema se extiende a las entradas, etapas y muestras del proceso.</p><p>Contacto, guías, quiz y analytics siguen fuera de esta entrega. Todos los previews tienen indexación desactivada.</p></div>
+  </main>
+</BaseLayout>

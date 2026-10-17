@@ -1,0 +1,12 @@
+---
+import Home from '../../../components/Home.astro';
+import { directions, heroHeadlines, type DirectionId, type HeadlineId } from '../../../config/site';
+export function getStaticPaths() {
+  return Object.keys(directions).flatMap((direction) => Object.keys(heroHeadlines).map((headline) => ({
+    params: { direction, headline },
+    props: { direction: direction as DirectionId, headline: headline as HeadlineId },
+  })));
+}
+const { direction, headline } = Astro.props;
+---
+<Home direction={direction} headline={headline} />

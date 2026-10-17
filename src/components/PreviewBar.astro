@@ -1,0 +1,24 @@
+---
+import { directions, type DirectionId, type HeadlineId } from '../config/site';
+import { variantUrl } from '../lib/preview';
+interface Props { direction: DirectionId; headline: HeadlineId }
+const { direction, headline } = Astro.props;
+const labels = { claridad: 'Claridad', diseno: 'Diseño', tranquilidad: 'Tranquilidad' } as const;
+---
+<aside class="preview-bar" aria-label="Comparación de diseño">
+  <div class="container preview-topline">
+    <span class="preview-status"><span aria-hidden="true">◌</span> Preview · Fase 2</span>
+    <details class="variant-controls">
+      <summary>Variantes <span class="variant-current">{direction === 'editorial' ? 'A' : 'B'} / {labels[headline]}</span></summary>
+      <div class="variant-panel">
+        <div class="variant-group"><span>Dirección</span><nav aria-label="Dirección visual">
+          {Object.entries(directions).map(([id, value]) => <a href={variantUrl(id as DirectionId, headline)} aria-current={id === direction ? 'page' : undefined}>{value.name}</a>)}
+        </nav></div>
+        <div class="variant-group"><span>Titular</span><nav aria-label="Territorio de titular">
+          {Object.entries(labels).map(([id, label]) => <a href={variantUrl(direction, id as HeadlineId)} aria-current={id === headline ? 'page' : undefined}>{label}</a>)}
+        </nav></div>
+      </div>
+    </details>
+    <a class="compare-link" href="/preview/">Comparar las seis variantes <span aria-hidden="true">↗</span></a>
+  </div>
+</aside>

@@ -1,0 +1,31 @@
+---
+---
+<header class="site-header">
+  <div class="container header-row">
+    <a class="wordmark" href="/" aria-label="Modulith, inicio">modulith<span aria-hidden="true">.</span></a>
+    <details class="mobile-menu">
+      <summary>Menú <span aria-hidden="true">＋</span></summary>
+      <nav aria-label="Navegación móvil">
+        <a href="#servicios">Servicios</a>
+        <a href="#preview-pendientes">Guías</a>
+        <a href="#preview-pendientes">Próximos pasos</a>
+        <a href="#preview-pendientes">Contacto</a>
+      </nav>
+    </details>
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#preview-pendientes">Guías</a>
+      <a class="nav-contact" href="#preview-pendientes">Contacto <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+  menu?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { menu.open = false; }));
+</script>
