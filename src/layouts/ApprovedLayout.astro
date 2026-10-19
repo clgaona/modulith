@@ -11,7 +11,9 @@ const canonical = new URL('/', Astro.site);
     <meta name="description" content="Preview visual de Modulith: diseño y construcción de vivienda, por etapas." />
     <title>Modulith | Diseño y construcción</title>
     <link rel="canonical" href={canonical.href} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg?v=modulith-m" type="image/svg+xml" sizes="any" />
+    <link rel="alternate icon" href="/favicon-32.png?v=modulith-m" type="image/png" sizes="32x32" />
+    <link rel="alternate icon" href="/favicon-16.png?v=modulith-m" type="image/png" sizes="16x16" />
     {manifest.styles.map(file => <link rel="stylesheet" href={`/${file}`} />)}
     {manifest.scripts.map(file => <script is:inline src={`/${file}`} defer></script>)}
   </head>

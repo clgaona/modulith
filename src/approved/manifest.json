@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "source": "creative-sprint/round-1/prototype",
   "sourceHtmlSha256": "a27e4948e4e390f07195b0f98a17a9c5bf3068551e26d584f0485402fb344d8a",
-  "bodySha256": "fc5337ca323f679a6954d289cb97856d98b831e3ce32543913639959f4f58fc9",
+  "bodySha256": "e6f814c3e97a297561192eaffe399fba08015fe033c03cb6b8d0b1a80a5447e8",
+  "revision": { "date": "2026-10-19", "baseCommit": "a86e8cb", "scope": "Official favicon, hero copy/mobile spacing, quiz intro and footer cleanup" },
   "styles": [
     "styles.css",
     "problem.css",
@@ -35,7 +36,7 @@
     {
       "path": "styles.css",
       "bytes": 16934,
-      "sha256": "49ab3eb64ac7557b050ab96428a37cdcbcda4b464710c6d619ff5e976f2c19cd"
+      "sha256": "fb8d7154394a5c77e1714caf2bd5e127effa1e133617ca9e99359777ef4251b7"
     },
     {
       "path": "problem.css",
@@ -64,8 +65,8 @@
     },
     {
       "path": "quiz.css",
-      "bytes": 17163,
-      "sha256": "cff43fbec9ab153ceef95e7d9843213358c215050ea2548da28e8ee6163b6de9"
+      "bytes": 16936,
+      "sha256": "7f2ccb1b3698d91b902f3d846c2879ba8c759b7bfb7095110797472afcb4ff63"
     },
     {
       "path": "faq.css",
@@ -74,8 +75,8 @@
     },
     {
       "path": "closing.css",
-      "bytes": 6012,
-      "sha256": "de3aa3bc11fda0c2ec7bb308f135ad0a71821f7750ad2d00fb8ea0f149d2fbc5"
+      "bytes": 5471,
+      "sha256": "c9790d46d2e2eef44d4e735a8d8b7a9804831c7a3606ffcd8d9dfbf5d081bec3"
     },
     {
       "path": "preview-config.js",
@@ -84,8 +85,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 4605,
-      "sha256": "212ff1e18f0240d181480f3a015c21c6a1a9eaa932fe94b2297866eb81a8ed17"
+      "bytes": 4711,
+      "sha256": "b69d88d04f1595fdf1e475e8cd36da41d9a5f27267c57cf6e35fdfdb66387da7"
     },
     {
       "path": "problem.js",

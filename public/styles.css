@@ -169,7 +169,7 @@ html[data-hero="cinematic"] .hero-description {
   font-weight: 400;
   max-width: 430px;
   margin: 26px 0 0;
-  text-wrap: initial;
+  text-wrap: balance;
   color: #f0f2ec;
   text-shadow: 0 1px 10px rgba(0,0,0,.2);
 }
@@ -280,8 +280,8 @@ html[data-hero="cinematic"] .entries .entry-number { color: #c5cec4; }
   html[data-hero="cinematic"] .brand-symbol img { width: 83px; height: 83px; }
   html[data-hero="cinematic"] .hero-copy { padding-top: 28px; max-width: none; }
   html[data-hero="cinematic"] h1 { font-size: 37px; line-height: 1.08; max-width: 450px; font-weight: 500; }
-  html[data-hero="cinematic"] .hero-description { font-size: 15px; line-height: 1.45; max-width: 325px; margin-top: 20px; }
-  html[data-hero="cinematic"] .hero-actions { margin-top: 24px; }
+  html[data-hero="cinematic"] .hero-description { font-size: 15px; line-height: 1.45; max-width: 325px; margin-top: 16px; }
+  html[data-hero="cinematic"] .hero-actions { margin-top: 20px; }
   html[data-hero="cinematic"] .action-primary { min-height: 51px; font-size: 13px; padding: 14px 16px; gap: 20px; }
   html[data-hero="cinematic"] .concept-label { max-width: 210px; bottom: 96px; font-size: 10px; line-height: 1.45; right: auto; }
   .hero-continue { bottom: 18px; font-size: 10px; gap: 7px; }

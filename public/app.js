@@ -20,9 +20,13 @@
   } else title.textContent = headlines[copy];
   if (copy === 'D') {
     const description = document.querySelector('.hero-description');
-    description.textContent = 'Del primer diseño a la construcción, coordinamos lo necesario para convertir tu idea en un lugar para vivir.';
-    // Reserve the approved copy footprint so longer supporting copy cannot move the CTA.
+    description.textContent = 'Del primer boceto a la entrega de tu casa, coordinamos el diseño, la ingeniería y la construcción.';
+    // Preserve the desktop footprint; mobile copy flows naturally above the house.
     const preserveActionPosition = () => {
+      if (window.matchMedia('(max-width: 700px)').matches) {
+        title.style.minHeight = '';
+        return;
+      }
       const reference = document.querySelector('.hero-copy').cloneNode(true);
       reference.setAttribute('aria-hidden', 'true');
       reference.inert = true;

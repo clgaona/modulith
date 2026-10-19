@@ -53,6 +53,41 @@ test('every approved section and final iteration is present', () => {
   for (const stage of ['brief', 'project', 'budget']) assert.ok(html.includes(`process-${stage}-v4.webp`));
 });
 
+test('official favicon preserves the authorized symbol and has 16/32 PNG fallbacks', () => {
+  const original = read('public/assets/logo-modulith.svg');
+  const favicon = read('public/favicon.svg');
+  const paths = svg => [...svg.matchAll(/<path\b([^>]*)\/>/g)].map(match => match[1].trim());
+  assert.deepEqual(paths(favicon), paths(original));
+  assert.ok(paths(favicon).length > 0);
+  assert.match(favicon, /viewBox="280 278 464 464"/);
+  assert.doesNotMatch(favicon, /<text\b|Georgia|<image\b/);
+  assert.match(html, /href="\/favicon\.svg\?v=modulith-m"/);
+  for (const size of [16, 32]) {
+    const png = readFileSync(`public/favicon-${size}.png`);
+    assert.equal(png.readUInt32BE(16), size);
+    assert.equal(png.readUInt32BE(20), size);
+    assert.deepEqual(readFileSync(`dist/favicon-${size}.png`), png);
+    assert.ok(html.includes(`href="/favicon-${size}.png?v=modulith-m"`));
+  }
+  assert.equal(read('dist/favicon.svg'), favicon);
+});
+
+test('final refinements preserve copy, disclosures in the quiz and protected sections', () => {
+  const supporting = 'Del primer boceto a la entrega de tu casa, coordinamos el diseño, la ingeniería y la construcción.';
+  assert.ok(html.includes(`<h2 class="hero-description">${supporting}</h2>`));
+  assert.ok(read('public/app.js').includes(supporting));
+  const start = html.slice(html.indexOf('class="quiz-start-copy"'), html.indexOf('class="quiz-start-image"'));
+  assert.doesNotMatch(start, /quiz-sample-notice|quiz-memory-note|Vista previa|Tus respuestas/);
+  const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'));
+  assert.doesNotMatch(footer, /image-disclosure|footer-bottom|Imágenes arquitectónicas/);
+  assert.match(html, /Referencias conceptuales|Render conceptual de muestra/);
+  assert.match(html, /id="quiz-consent"/);
+  assert.match(html, /Las imágenes son conceptuales y no sustituyen un diseño arquitectónico desarrollado/);
+  const protectedBlock = (a, b) => sourceBody.slice(sourceBody.indexOf(`<section id="${a}"`), sourceBody.indexOf(`<section id="${b}"`));
+  assert.equal(hash(protectedBlock('como-funciona', 'empieza')), 'bda9eaa1f2d73c9ac200cdf2d3fda57070e7cf5bdf1fe6c63ecfa55b37ed57e2');
+  assert.equal(hash(protectedBlock('preguntas', 'conversemos')), 'd26b1052b00d333f1442cc974f0561bbbf3a211bde4652eecc74e77c503b5306');
+});
+
 test('the eight-step quiz validates program and produces the structured conceptual brief', () => {
   assert.equal(domain.questions.length, 8);
   assert.equal(domain.questions[5].key, 'program');
