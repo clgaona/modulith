@@ -1,0 +1,19 @@
+---
+import manifest from '../approved/manifest.json';
+const canonical = new URL('/', Astro.site);
+---
+<!doctype html>
+<html lang="es" data-direction="plano" data-hero="cinematic">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="Preview visual de Modulith: diseño y construcción de vivienda, por etapas." />
+    <title>Modulith | Diseño y construcción</title>
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {manifest.styles.map(file => <link rel="stylesheet" href={`/${file}`} />)}
+    {manifest.scripts.map(file => <script is:inline src={`/${file}`} defer></script>)}
+  </head>
+  <body><slot /></body>
+</html>

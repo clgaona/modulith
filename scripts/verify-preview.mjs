@@ -13,6 +13,51 @@ const output = join(process.cwd(), 'artifacts');
 mkdirSync(output, { recursive: true });
 const report = { base, checked: [], home: [], staticOnly: false, noJS: false, issues: [] };
 
+async function verifyApprovedQuiz(page) {
+  await page.locator('#quiz-start').click();
+  await page.getByLabel('Diseñar y construir mi casa', { exact: true }).check();
+  await page.locator('#quiz-next').click();
+  await page.locator('#quiz-back').click();
+  assert.equal(await page.getByLabel('Diseñar y construir mi casa', { exact: true }).isChecked(), true);
+  await page.locator('#quiz-next').click();
+  await page.getByLabel('Sí, ya es mío', { exact: true }).check();
+  await page.locator('#quiz-next').click();
+  await page.getByLabel('Ciudad o municipio', { exact: true }).fill('Ciudad de prueba');
+  await page.getByLabel('Departamento', { exact: true }).fill('Departamento de prueba');
+  await page.locator('#quiz-next').click();
+  await page.getByLabel('Voy a empezar de cero', { exact: true }).check();
+  await page.locator('#quiz-next').click();
+  await page.getByLabel('En 6 a 12 meses', { exact: true }).check();
+  await page.locator('#quiz-next').click();
+  await page.getByLabel('Pisos', { exact: true }).selectOption('two');
+  await page.getByLabel('Habitaciones', { exact: true }).selectOption('three');
+  await page.getByLabel('Área aproximada', { exact: true }).selectOption('100_150');
+  await page.locator('#quiz-next').click();
+  assert.equal(await page.locator('.quiz-option-image').count(), 5);
+  assert.equal(await page.locator('#quiz-options').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), 1);
+  await page.getByRole('radio', { name: 'Contemporáneo', exact: true }).check();
+  await page.locator('#quiz-next').click();
+  assert.equal(await page.locator('.quiz-option-image').count(), 5);
+  await page.getByRole('checkbox', { name: 'Madera y tonos cálidos', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Piedra y texturas naturales', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Metal y vidrio', exact: true }).click();
+  assert.equal(await page.getByRole('checkbox', { name: 'Metal y vidrio', exact: true }).isChecked(), false);
+  assert.match(await page.locator('#quiz-material-hint').innerText(), /hasta dos/);
+  await page.locator('#quiz-next').click();
+  assert.equal(await page.locator('#empieza').getAttribute('data-quiz-view'), 'result');
+  assert.match(await page.locator('#quiz-result-context').innerText(), /Contemporáneo.*Madera.*Piedra.*2 pisos.*3 habitaciones/);
+  assert.equal(await page.locator('[data-quiz-pane="result"] img').count(), 0);
+  await page.locator('#quiz-receive').click();
+  await page.locator('#quiz-submit').click();
+  assert.equal(await page.locator('#quiz-name-error').isVisible(), true);
+  await page.locator('#quiz-name').fill('Prueba Sintetica');
+  await page.locator('#quiz-email').fill('prueba@example.com');
+  await page.locator('#quiz-consent').check();
+  await page.locator('#quiz-submit').click();
+  await page.locator('#quiz-submit-error').waitFor({ state: 'visible' });
+  assert.match(await page.locator('#quiz-submit-error').innerText(), /todavía no están activos/);
+}
+
 try {
   for (const direction of ['editorial', 'mineral']) for (const headline of ['claridad', 'diseno', 'tranquilidad']) {
     for (const width of [320, 390, 768, 1440]) {
@@ -77,26 +122,30 @@ try {
     assert.equal(response.status(), 200);
     await page.evaluate(() => document.fonts.ready);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
-    assert.equal(await page.locator('.hero-visual svg').isVisible(), true);
+    assert.equal(await page.locator('.hero-media img').isVisible(), true);
+    assert.equal(await page.locator('[data-process-step]').count(), 8);
+    assert.equal(await page.locator('.faq-item').count(), 12);
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), 'https://modulith.com.co/');
     assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex, nofollow');
     for (const href of await page.locator('a[href^="#"]').evaluateAll((links) => links.map((link) => link.getAttribute('href')))) {
+      if (href === '#') continue;
       assert.equal(await page.locator(href).count(), 1, `Missing anchor: ${href}`);
     }
-    if (width < 768) {
-      await page.locator('.mobile-menu summary').click();
-      await page.locator('.mobile-menu a[href="#servicios"]').click();
-      assert.ok(page.url().endsWith('#servicios'));
-      assert.equal(await page.locator('.mobile-menu').getAttribute('open'), null);
-    }
-    await page.locator('.button-primary').click();
-    assert.ok(page.url().endsWith('#preview-pendientes'));
-    await page.locator('.hero-copy .text-link').click();
-    assert.ok(page.url().endsWith('#preview-pendientes'));
+    await page.locator('.hero-actions .action-primary').click();
+    assert.equal(await page.locator('#destination-dialog').isVisible(), true);
+    assert.equal(await page.locator('#destination-path').innerText(), '/contacto/');
+    await page.getByRole('button', { name: 'Cerrar', exact: true }).click();
+    await page.locator('.hero-continue').click();
+    assert.ok(page.url().endsWith('#como-funciona'));
+    await page.goto(`${base}/`);
+    await page.locator('.header-action').click();
+    assert.ok(page.url().endsWith('#empieza'));
+    await verifyApprovedQuiz(page);
     assert.deepEqual(errors, []);
     assert.deepEqual(failedResources, []);
     if (width === 390 || width === 1440) {
-      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.goto(`${base}/`);
+      await page.evaluate(() => document.fonts.ready);
       await page.screenshot({ path: join(output, `home-${width}.png`), fullPage: true });
     }
     report.home.push({ width, status: response.status(), errors, failedResources });
@@ -132,7 +181,7 @@ try {
   report.noJS = true;
   await noJS.close();
   assert.deepEqual(report.issues, [], 'Accessibility violations: see artifacts/preview-report.json');
-  console.log('PASS: 24 variant and 4 homepage responsive cases, menu, comparison, no JS, static output, favicon, 404 and no capture.');
+  console.log('PASS: 24 legacy variant and 4 approved homepage responsive cases, full quiz, anchors, no JS, static output, favicon, 404 and disabled capture.');
 } finally {
   writeFileSync(join(output, 'preview-report.json'), JSON.stringify(report, null, 2));
   await browser.close();

@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "source": "creative-sprint/round-1/prototype",
+  "sourceHtmlSha256": "a27e4948e4e390f07195b0f98a17a9c5bf3068551e26d584f0485402fb344d8a",
+  "bodySha256": "fc5337ca323f679a6954d289cb97856d98b831e3ce32543913639959f4f58fc9",
+  "styles": [
+    "styles.css",
+    "problem.css",
+    "value.css",
+    "comparison.css",
+    "process.css",
+    "trust.css",
+    "quiz.css",
+    "faq.css",
+    "closing.css"
+  ],
+  "scripts": [
+    "preview-config.js",
+    "app.js",
+    "problem.js",
+    "value.js",
+    "comparison.js",
+    "process.js",
+    "trust.js",
+    "quiz-config.js",
+    "quiz-domain.js",
+    "quiz-transport.js",
+    "quiz.js",
+    "faq-config.js",
+    "faq.js",
+    "footer-config.js",
+    "closing.js"
+  ],
+  "files": [
+    {
+      "path": "styles.css",
+      "bytes": 16934,
+      "sha256": "49ab3eb64ac7557b050ab96428a37cdcbcda4b464710c6d619ff5e976f2c19cd"
+    },
+    {
+      "path": "problem.css",
+      "bytes": 4633,
+      "sha256": "d8718078c9dca6d5ebcd7716a1e46936a2eb529aab8115fca038bdc201c306a2"
+    },
+    {
+      "path": "value.css",
+      "bytes": 5005,
+      "sha256": "373381db97709c131ac65abd94d2fe8906119c3283956dc8d2271580f5cf1d3c"
+    },
+    {
+      "path": "comparison.css",
+      "bytes": 5496,
+      "sha256": "7a4a78dfed9df8a52cb4b3237ed1887defbd20f8819a6dd617d9fee25f7dfba2"
+    },
+    {
+      "path": "process.css",
+      "bytes": 5307,
+      "sha256": "787ce7d37da0b80b12b42bf75af94d6d126954a53bd4325302df8c0700802cb4"
+    },
+    {
+      "path": "trust.css",
+      "bytes": 2495,
+      "sha256": "065431870bc52b74cf22d8bc906fcb445dc779c280ff6843c1be6e55de01499a"
+    },
+    {
+      "path": "quiz.css",
+      "bytes": 17163,
+      "sha256": "cff43fbec9ab153ceef95e7d9843213358c215050ea2548da28e8ee6163b6de9"
+    },
+    {
+      "path": "faq.css",
+      "bytes": 3549,
+      "sha256": "91d6ec2e81d0cb66f604ce072e734333cf815b5bdfdf24b9ecbff0d853ca1d86"
+    },
+    {
+      "path": "closing.css",
+      "bytes": 6012,
+      "sha256": "de3aa3bc11fda0c2ec7bb308f135ad0a71821f7750ad2d00fb8ea0f149d2fbc5"
+    },
+    {
+      "path": "preview-config.js",
+      "bytes": 216,
+      "sha256": "324cc949701a55f1deb930e92cd333b15b5ee5bfe550032b25e3fe8ee25a6d57"
+    },
+    {
+      "path": "app.js",
+      "bytes": 4605,
+      "sha256": "212ff1e18f0240d181480f3a015c21c6a1a9eaa932fe94b2297866eb81a8ed17"
+    },
+    {
+      "path": "problem.js",
+      "bytes": 744,
+      "sha256": "5a13ca26346cae95a7163ec76415f709eae9004ba780b1f43d031bc4cf2312a7"
+    },
+    {
+      "path": "value.js",
+      "bytes": 1964,
+      "sha256": "93a9f4f1d942c807df6b44f9dc32b4ea99fabd4f513a3a5889be023bf956df96"
+    },
+    {
+      "path": "comparison.js",
+      "bytes": 949,
+      "sha256": "908276e13fbdc3f5c70ad9eaa5eedde5dbe22a47bc78cd3598e6408e6e87c341"
+    },
+    {
+      "path": "process.js",
+      "bytes": 2730,
+      "sha256": "60675a20e59ab53aea2c1f49992e28d6f347b787aeb0a56e14c5a9075741f005"
+    },
+    {
+      "path": "trust.js",
+      "bytes": 835,
+      "sha256": "5930ff77868064e23949ff0c6b7fd023fa77022261d60ad1ac856cb71b85027a"
+    },
+    {
+      "path": "quiz-config.js",
+      "bytes": 211,
+      "sha256": "447cca52870c46c5a01c7775587c75f92e5a9f52bdbac40a84386af83af36a3b"
+    },
+    {
+      "path": "quiz-domain.js",
+      "bytes": 14084,
+      "sha256": "9834f69ffc416f7d8e6138b9427e6d6be5c448e2f9b20d267792eb62fa7f6ab7"
+    },
+    {
+      "path": "quiz-transport.js",
+      "bytes": 2481,
+      "sha256": "f6b0998284e40900ba6c5d42316dd3127889168605e75314055a991b36f8e43b"
+    },
+    {
+      "path": "quiz.js",
+      "bytes": 15580,
+      "sha256": "53c2b4ed6fdb9224a1dc5032d243820bf6c6d291be966a35b82563b7ac02f654"
+    },
+    {
+      "path": "faq-config.js",
+      "bytes": 426,
+      "sha256": "91b77e4aeac7a432bfaaa0c398a3c8b58198a605fe2ba5f50baefc8681773df9"
+    },
+    {
+      "path": "faq.js",
+      "bytes": 694,
+      "sha256": "dc83f9d8582d9fb3a30dac8a3b57f8730ce5e51c0de25e6b88f10a311ca80d94"
+    },
+    {
+      "path": "footer-config.js",
+      "bytes": 383,
+      "sha256": "801833afc0ec6ff427769ca7420ea950ca41cc65ed39dd37535a34705fab5c7b"
+    },
+    {
+      "path": "closing.js",
+      "bytes": 1423,
+      "sha256": "02019f838e4d4d20ea500d3082872bbe89b23178ff6caa484b0dc0856b454185"
+    },
+    {
+      "path": "assets/closing-threshold-v2-mobile.webp",
+      "bytes": 89298,
+      "sha256": "ac7efc01746ab8e3f4a6da0dfa79bb394fe170d9d7194e52882b9732594e2aa5"
+    },
+    {
+      "path": "assets/closing-threshold-v2.webp",
+      "bytes": 220214,
+      "sha256": "5921999b27bb122ff408d211ed782924cfc7e8751780b00363946f3f2edcd22e"
+    },
+    {
+      "path": "assets/hero-daylight-v2-mobile.webp",
+      "bytes": 1945898,
+      "sha256": "ac8a9ec8ee92c33fbd7a336270512fdda4b3b950948b17ee3b493fec1dd8cb81"
+    },
+    {
+      "path": "assets/hero-daylight-v2.webp",
+      "bytes": 1967552,
+      "sha256": "54efe577ae8248e843e53484f3d72732f42dd0b97fbbfdce04017a1943d51599"
+    },
+    {
+      "path": "assets/instrument-sans.woff2",
+      "bytes": 88784,
+      "sha256": "aa72922aafcc0dc18f36ec1d805b0212057dabe8b9d5b8b57f67035aea1b826d"
+    },
+    {
+      "path": "assets/logo-modulith.svg",
+      "bytes": 1348445,
+      "sha256": "a9934faa5ae236632769c2caf72a4f63cf3bb0a31cf1b2af83b10be18026523a"
+    },
+    {
+      "path": "assets/process-brief-v4-mobile.webp",
+      "bytes": 368876,
+      "sha256": "1c0c5843cb12ac604dcb6bb9d84a630b1749fd5edfeed6d0d8beb96cfb820d13"
+    },
+    {
+      "path": "assets/process-brief-v4.webp",
+      "bytes": 1851252,
+      "sha256": "132d0b5adbcb1059634077bd76266ed4b93dcbca190b0b2de00b24154aeb2a69"
+    },
+    {
+      "path": "assets/process-budget-v4-mobile.webp",
+      "bytes": 315676,
+      "sha256": "a305deb71673a538529276cc85653f4965f593b286f5d43df3f9231bfdbee0e5"
+    },
+    {
+      "path": "assets/process-budget-v4.webp",
+      "bytes": 1906982,
+      "sha256": "6db25d4072759d646d4f8360b8dfbc9ce6e77104bccba56001cffdd0ce75ae98"
+    },
+    {
+      "path": "assets/process-construction.webp",
+      "bytes": 320004,
+      "sha256": "69a832cb0380fcd5531eaeda37461e57f1a611fdcb9e435e8c0d66d5c9467d10"
+    },
+    {
+      "path": "assets/process-delivery-v2.webp",
+      "bytes": 305088,
+      "sha256": "afbe260206ac907e9d9c3ce204d9a4937d8d444dfb91aa74960ee305184bef2c"
+    },
+    {
+      "path": "assets/process-design-v2.webp",
+      "bytes": 203414,
+      "sha256": "fe87936c41c1d201b0390506035c22ef2251df561fe6d202cac499caf482904d"
+    },
+    {
+      "path": "assets/process-documents-v2.webp",
+      "bytes": 230658,
+      "sha256": "215e8f2be169654446a271bd8030cc8abff62863461e62e34292d5841526aa3d"
+    },
+    {
+      "path": "assets/process-idea-v2.webp",
+      "bytes": 159752,
+      "sha256": "0f60509db757d0c3966db2dc68013d8b5f922ed2cee7a89387bd7eb54f65417b"
+    },
+    {
+      "path": "assets/process-project-v4-mobile.webp",
+      "bytes": 383456,
+      "sha256": "0865997a91185d9068aacce957b2a77be7bde57aea95ec85cabc64924c974e30"
+    },
+    {
+      "path": "assets/process-project-v4.webp",
+      "bytes": 1995802,
+      "sha256": "245323b99dfed614d0ebc5c35cbac14a435bd73bc7bd63f3062351051a4335b5"
+    },
+    {
+      "path": "assets/quiz-concept-plan-v2.webp",
+      "bytes": 287880,
+      "sha256": "3f82eaa385126f18b674119218cc7bc0d0a456926334992a2c969284a95a263b"
+    },
+    {
+      "path": "assets/quiz-concept-render-v2.webp",
+      "bytes": 416384,
+      "sha256": "563bbbf364f9c33d9f645c114f58e6205df0eb7bb311176c1968adf636d036eb"
+    },
+    {
+      "path": "assets/quiz-material-concrete-v3-small.webp",
+      "bytes": 11610,
+      "sha256": "92d8c951bfc975cd5110d54d293deb79311bb754d07bd0e5b8ebb709f2644baf"
+    },
+    {
+      "path": "assets/quiz-material-concrete-v3.webp",
+      "bytes": 29680,
+      "sha256": "2b5660f2fe053397d3277e0b0df1d988325838d09aceec461f3db8757a49137c"
+    },
+    {
+      "path": "assets/quiz-material-metal-glass-v4-small.webp",
+      "bytes": 15520,
+      "sha256": "f6b0b1e4a64eadd95cf8a58a6bf2d8b3f2845ba6b9a8ac08f3e50ba75b6877e8"
+    },
+    {
+      "path": "assets/quiz-material-metal-glass-v4.webp",
+      "bytes": 39154,
+      "sha256": "733c894624b2d3af3fed9dad741263e6012f41ea20b5493d1a1d317366e3bd36"
+    },
+    {
+      "path": "assets/quiz-material-stone-v3-small.webp",
+      "bytes": 14276,
+      "sha256": "50601ad30748a8d0c04dda5493f424ced7bab944bc50e5aebd28f9fa34dd02a4"
+    },
+    {
+      "path": "assets/quiz-material-stone-v3.webp",
+      "bytes": 38022,
+      "sha256": "a6bb17b60bfabd4341ed3a563e15429fb95d22c3c49480965ef9034d77db6cbf"
+    },
+    {
+      "path": "assets/quiz-material-unsure-v3-small.webp",
+      "bytes": 6898,
+      "sha256": "cc49f132a29064d5b1dcba21609bb1f0d0ba043624ad85fdb696951016eeb9f3"
+    },
+    {
+      "path": "assets/quiz-material-unsure-v3.webp",
+      "bytes": 20600,
+      "sha256": "9047b4afb5faf85b497103f7b743644a91281e043e3ad1ce01432ef703e87d00"
+    },
+    {
+      "path": "assets/quiz-material-wood-v3-small.webp",
+      "bytes": 13248,
+      "sha256": "65e5b159eae748d3fedadba3c8c0d5d68a969267954fa6377b82a1bd9ad62471"
+    },
+    {
+      "path": "assets/quiz-material-wood-v3.webp",
+      "bytes": 34274,
+      "sha256": "8c7eea041beffaf1ee41d4c5eaa8d01c343e7adf1b4bbedb892368c8635ed2ab"
+    },
+    {
+      "path": "assets/quiz-style-contemporary-v4-small.webp",
+      "bytes": 13542,
+      "sha256": "c1712709191e0868194b763e3da3df4940d5b210e8f5a17e58cf0bc6ff9bfc8a"
+    },
+    {
+      "path": "assets/quiz-style-contemporary-v4.webp",
+      "bytes": 34752,
+      "sha256": "f0e8cc56cb1a3309b71ccca59a9b53c9b706eb714b4dec737916444a888dbffc"
+    },
+    {
+      "path": "assets/quiz-style-industrial-v3-small.webp",
+      "bytes": 14878,
+      "sha256": "775ac4f0d26de7f222bfe8a0ecc06f9a4718b85a165ff52ce5cb3227ece3dfa6"
+    },
+    {
+      "path": "assets/quiz-style-industrial-v3.webp",
+      "bytes": 38382,
+      "sha256": "ceac0b304d0b5d2942d7dd3240ddb453c7476214c73f1de08e64042eccfa8274"
+    },
+    {
+      "path": "assets/quiz-style-minimal-v3-small.webp",
+      "bytes": 11766,
+      "sha256": "b61f14bd8a3713cb3fbd4e8a5f50ade894e4c921336523534ffe5d38f319155b"
+    },
+    {
+      "path": "assets/quiz-style-minimal-v3.webp",
+      "bytes": 29302,
+      "sha256": "1f8aa35f1cdc7ddd03dc2df2be369a7d3bc6f84dce9ad392baefa1e9e927fd87"
+    },
+    {
+      "path": "assets/quiz-style-unsure-v3-small.webp",
+      "bytes": 3874,
+      "sha256": "83e6c01e4c775775324e20f84233a8ceaf6fd22ab9ae355441c8f4a03e7c3f03"
+    },
+    {
+      "path": "assets/quiz-style-unsure-v3.webp",
+      "bytes": 7790,
+      "sha256": "b2f8bb76aeaa577fd423b8043d56e3354d0ee6a5c7f429d6a4c7413745d7ae5e"
+    },
+    {
+      "path": "assets/quiz-style-warm-v3-small.webp",
+      "bytes": 15260,
+      "sha256": "a842941ffc2d7156f9969ff68b7b8f02bb82628b56fd20fa3083f1d3ae444d06"
+    },
+    {
+      "path": "assets/quiz-style-warm-v3.webp",
+      "bytes": 41386,
+      "sha256": "70f95b137d437621c447720da14334120dd9e86bbd72b723000f1aab355c952b"
+    },
+    {
+      "path": "assets/value-house.webp",
+      "bytes": 322274,
+      "sha256": "72e8d7fee347c271735ee981298a0845c74017c094ea596aac43a80fbac383c2"
+    },
+    {
+      "path": "assets/value-sketch.webp",
+      "bytes": 414208,
+      "sha256": "9586f96dfdb5ba05be5e3b61eb0b63e2514315d9c50a692409084e0c4f46b900"
+    }
+  ]
+}

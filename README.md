@@ -1,58 +1,50 @@
-# Modulith · Feedback público estático
+# Modulith - Homepage aprobado / feedback estatico
 
-Versión de feedback de las **Fases 1 y 2**. Astro 7.3.6 + TypeScript + CSS, homepage y seis variantes completamente estáticos. No hay adaptador de servidor, Workers, endpoints, captura de leads, OpenAI API, quiz implementado ni analytics. El diseño, los textos, los croquis y las interacciones visuales se conservan.
+Repositorio oficial: `https://github.com/clgaona/modulith.git`. El homepage `/` contiene la version cinematografica aprobada, sincronizada el 18 de octubre de 2026 desde `creative-sprint/round-1/prototype`: hero con laptop, nueve secciones, proceso de ocho etapas, quiz visual, FAQ y cierre/footer.
 
 ## Ejecutar
 
-Requiere Node 22.12+ y npm. La versión probada y fijada en `.node-version` para Cloudflare Pages es **24.21.0**.
+Node probado y fijado en `.node-version`: **24.21.0**. No se necesitan secretos ni variables de entorno.
 
 ```sh
 npm ci
-npm run dev
-```
-
-Abrir `http://localhost:4321/` o `/preview/`. También puede usarse `npm run build` seguido de `npm run preview` para servir los archivos estáticos de `dist/` localmente. Las direcciones locales solo corresponden a desarrollo y pruebas; el HTML publicado no depende de ellas.
-
-| Dirección | Claridad | Diseño | Tranquilidad |
-|---|---|---|---|
-| A · Editorial cálida | `/preview/editorial/claridad/` | `/preview/editorial/diseno/` | `/preview/editorial/tranquilidad/` |
-| B · Mineral contemporánea | `/preview/mineral/claridad/` | `/preview/mineral/diseno/` | `/preview/mineral/tranquilidad/` |
-
-`/` utiliza A / Claridad como default de revisión. Los controles «Variantes» cambian un eje conservando el otro. Todas las combinaciones comparten componentes, contenido y croquis. Los CTA de funcionalidades pendientes llevan a una nota explícita del preview; no son formularios simulados.
-
-## Reversible
-
-- Colores, familia de títulos, radios y tratamientos de superficie: `src/styles/global.css`.
-- Tres titulares y texto compartido: `src/config/site.ts`.
-- Hero y visual separados: el SVG original se puede reemplazar por un medio posterior sin cambiar copy/CTA. No hay transición animada ni supuesto proyecto construido.
-- Fuente editorial: Source Serif 4; cuerpo y alternativa: Inter. WOFF2 autoalojados mediante Fontsource. Licencias conservadas en `public/fonts/`.
-- Cobertura: configuración común. No hay geocodificación ni rechazo por territorio.
-
-## Comprobaciones
-
-```sh
 npm run check
 npm run build
 npm test
-npm run preview
-# En otra terminal, con preview activo:
-npm run test:browser
+npm run preview -- --port 4322
 ```
 
-El script de navegador utiliza Chrome o Edge instalados (o `BROWSER_EXECUTABLE`), comprueba las seis variantes y el homepage en 320/390/768/1440 px, navegación, favicon, ausencia de tracking, accesibilidad automatizada y que el antiguo endpoint de runtime devuelve 404. Guarda capturas y reporte en `artifacts/` (ignorado). No descarga un navegador ni navega a sitios externos.
+Abrir `http://127.0.0.1:4322/`. Para desarrollo: `npm run dev`. La preview necesita un servidor local activo; el dominio publicado no depende de ese proceso.
 
-Los tests del build comprueban contenido compartido, anchors, fuentes y licencias, noindex, dominio canónico, recursos locales y ausencia de runtime o referencias locales en producción. La colección de guías vacía produce un aviso esperado durante el build; los artículos pertenecen a una fase posterior. La revisión automática no equivale a certificación WCAG ni a pruebas con usuarios.
+## Fuente oficial del homepage
 
-No se necesitan variables de entorno ni secretos para construir o renderizar esta versión.
+- `src/pages/index.astro`: entrada Astro.
+- `src/layouts/ApprovedLayout.astro`: documento estatico, canonical, noindex y carga ordenada de CSS/JS.
+- `src/approved/home.html`: cuerpo HTML aprobado, sin cambios visuales durante la sincronizacion.
+- `public/*.css`, `public/*.js`, `public/assets/`: estilos, interacciones, quiz, imagenes y fuentes aprobados.
+- `src/approved/quiz-contract.d.ts`: contrato preparado para una futura integracion de generacion y entrega.
+- `src/approved/manifest.json`: procedencia y hashes de los 65 archivos de runtime transferidos.
 
-## Cloudflare Pages y lanzamiento
+Las siguientes ediciones deben realizarse en este repositorio. `creative-sprint` no participa en el build ni debe seguir siendo una segunda fuente automatica. Su contenido original se conserva intacto. `scripts/import-approved-home.mjs` permite una importacion manual explicita; no se ejecuta al construir o desplegar.
 
-Configuración: branch `main`, build `npm run build`, output `dist`, raíz del repositorio y Node **24.21.0** (archivo `.node-version`). Dominio canónico `https://modulith.com.co`, sin base path. Ver los pasos de conexión a GitHub, configuración de Pages y retiro de noindex en [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+Las antiguas rutas `/preview/` y sus seis variantes se conservan como archivo historico. No son el homepage actual. Sus componentes, estilos Inter/Source Serif y configuracion historica no se cargan en `/`. El homepage aprobado usa Instrument Sans autoalojada; sus licencias se conservan en `public/fonts/`.
 
-Se retiraron `/api/runtime/`, `wrangler.jsonc`, los tipos generados de Workers, `@astrojs/cloudflare`, Wrangler y sus scripts. `dist/` contiene directamente el HTML y los assets; no hay `dist/client/`, `dist/server/`, Pages Functions ni Worker. Las fuentes están autoalojadas y el croquis es SVG inline. No hay sitemap ni metadatos Open Graph existentes que migrar.
+## Funcionalidades y limites actuales
 
-Los documentos de `docs/`, `src/server/README.md` y `src/lib/analytics/README.md` conservan planificación de fases futuras. No activan backend ni integraciones. `scripts/preview-supervisor.ps1`, `scripts/install-preview-startup.ps1` y `docs/preview-local.md` corresponden a otro prototipo local histórico: no participan del build ni del deployment de este proyecto.
+El quiz funciona en el navegador: ocho pasos, programa de vivienda, referencias visuales, hasta dos materiales, sintesis pre-lead, formulario y validaciones. La captura real y la generacion de render/planta siguen desactivadas, como en el original: no existe backend conectado ni politica de datos aprobada. No se simula un envio exitoso en produccion ni se envia PII a analytics. Los estados de simulacion solo son locales y usan datos sinteticos en pruebas.
 
-Se conserva el override de `sharp` 0.35.5, también utilizado por Astro para optimización de imágenes en build; no es un runtime de producción.
+Los destinos `/contacto/` y `/privacidad/` siguen siendo pendientes del preview aprobado: el JavaScript existente los intercepta y muestra su dialogo explicativo. No se inventaron paginas, correos, telefonos ni endpoints. La coleccion de guias sigue vacia.
 
-Todas las páginas conservan `<meta name="robots" content="noindex, nofollow">`. `robots.txt` permite el rastreo de recursos para renderizar y leer ese meta. Antes del lanzamiento oficial se debe retirar el meta global de `src/layouts/BaseLayout.astro`, actualizar el test que lo exige y reconstruir; ver `docs/DEPLOYMENT.md`. Esta versión no es el lanzamiento del MVP.
+## Comprobaciones
+
+`npm test` verifica paridad byte a byte del HTML y de los assets importados, todas las secciones, configuracion estatica, recursos, anchors y comportamiento del dominio/transporte del quiz. `npm run check` revisa Astro y TypeScript. Las advertencias de guias vacias y los hints por variables no utilizadas en el JS aprobado no alteran el build.
+
+`npm run test:browser` es un script de regresion para Chrome/Edge instalado; requiere una preview activa (por defecto puerto 4321, configurable con `PREVIEW_URL`). No descarga navegadores. Incluye las variantes historicas y el homepage aprobado. Los resultados y capturas locales se guardan en `artifacts/`, ignorado por Git. La validacion visual de esta sincronizacion se documenta en [docs/SYNC_AUDIT_2026-10-18.md](docs/SYNC_AUDIT_2026-10-18.md).
+
+## Cloudflare Pages
+
+Se conserva Astro **7.3.6**, `output: 'static'`, sin adaptador, Workers ni Functions. Configuracion: rama `main`, raiz del repositorio, `npm run build`, salida `dist`, Node **24.21.0**, dominio `https://modulith.com.co`. `astro.config.mjs`, dependencias y lockfile no cambian durante esta sincronizacion.
+
+Todas las paginas mantienen `noindex, nofollow` temporal. El homepage lo define en `ApprovedLayout.astro`; las variantes historicas y el 404 en `BaseLayout.astro`. Ver [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) antes de autorizar un lanzamiento indexable.
+
+La rama local `codex/backup-published-2026-10-18` conserva el commit anterior a la sincronizacion. Esta entrega prepara un commit local en `main`; no realiza push ni publica cambios en Cloudflare.

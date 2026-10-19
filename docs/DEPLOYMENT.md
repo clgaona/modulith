@@ -1,72 +1,60 @@
-# Deployment estático de feedback · Modulith
+# Deployment estatico de feedback - Modulith
 
-## Configuración verificada
+## Configuracion conservada
 
+- Repositorio: `https://github.com/clgaona/modulith.git`.
+- Rama de produccion: `main`.
 - Framework: Astro 7.3.6, `output: 'static'`, sin adaptador.
-- Dominio canónico: `https://modulith.com.co`, sin base path; canonical por página en `src/layouts/BaseLayout.astro`.
-- Rama de producción: `main`.
-- Raíz de build: raíz del repositorio.
-- Comando de build: `npm run build`.
-- Directorio de salida: `dist` (con `index.html` directamente en su raíz).
-- Node: **24.21.0**, fijado en `.node-version`; el mínimo de Astro es 22.12.0.
-- Variables de entorno y secretos de aplicación: **ninguno**.
-- Solo build en Node: el sitio publicado son HTML, CSS, JavaScript, SVG y fuentes estáticos. No necesita Node, Workers, Pages Functions, D1 ni APIs al recibir visitas.
+- Dominio canonico: `https://modulith.com.co`, sin base path.
+- Raiz de build: raiz del repositorio.
+- Comando: `npm run build`.
+- Salida: `dist` (incluye `index.html` en su raiz).
+- Node: **24.21.0**, fijado en `.node-version`.
+- Variables de entorno y secretos para esta version: ninguno.
 
-Cloudflare Pages admite `.node-version` para seleccionar Node. Si el proyecto remoto tiene un `NODE_VERSION` previo, eliminarlo o igualarlo a `24.21.0` para que no contradiga el archivo. Referencias oficiales: [build image](https://developers.cloudflare.com/pages/configuration/build-image/) y [build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/).
+El HTML publicado, CSS, JavaScript, imagenes y fuentes son estaticos. No hay Node de produccion, Workers, Pages Functions, D1 ni API de generacion. La sincronizacion de octubre de 2026 no cambia `astro.config.mjs`, `package.json`, `package-lock.json` ni `.node-version`.
 
-## Verificación local
+## Verificacion local
 
 ```sh
 npm ci
 npm run check
 npm run build
 npm test
-npm run preview
+npm run preview -- --port 4322
 ```
 
-En otra terminal, con preview activo en el puerto 4321:
+Abrir `http://127.0.0.1:4322/`. El servidor es exclusivamente local. `dist/` se genera desde este repositorio, sin acceder a `creative-sprint`.
 
-```sh
+El homepage aprobado es `/`. `/preview/` y sus seis variantes se conservan como archivo historico. No usar esas variantes para evaluar la version actual. El manifiesto `src/approved/manifest.json` registra los hashes de la transferencia; los tests verifican su integridad en `public/` y `dist/`.
+
+El script opcional `npm run test:browser` usa un navegador instalado y el puerto 4321 por defecto. En PowerShell, para este servidor:
+
+```powershell
+$env:PREVIEW_URL = 'http://127.0.0.1:4322'
 npm run test:browser
 ```
 
-`npm run preview` es únicamente un servidor de revisión local. No forma parte de la arquitectura de producción. El script de navegador usa Chrome/Edge instalado y guarda resultados en `artifacts/`, ignorado por Git.
+## Quiz y destinos pendientes
 
-El homepage `/`, la comparación `/preview/`, las seis variantes y `404.html` son estáticos. Contacto, guías y quiz aún dirigen al aviso existente de funcionalidades pendientes; no hay un quiz funcional ni captura de datos que validar o conectar a un backend en esta fase.
+El quiz aprobado es frontend estatico y conserva sus ocho pasos y validaciones. `public/quiz-config.js` mantiene `captureEnabled: false` y `policyApproved: false`; `/api/contacto` no existe. No activar esos flags sin backend y politica aprobados. Los contratos de `src/approved/quiz-contract.d.ts` preparan la integracion futura, no la implementan.
 
-## Conectar el repositorio real a GitHub
+Los enlaces pendientes `/contacto/` y `/privacidad/` abren el dialogo del preview mediante `public/app.js`, tal como en el original aprobado. No se eliminaron funcionalidades para compilar. La generacion real, el almacenamiento y la entrega requieren otra implementacion autorizada.
 
-No hay remote configurado. Crear en GitHub un repositorio **vacío**, sin README, licencia ni `.gitignore` iniciales. Copiar su URL HTTPS o SSH real. Desde la raíz local, en PowerShell:
+## Publicacion: requiere autorizacion
 
-```powershell
-$modulithRemote = Read-Host 'Pega la URL real del repositorio GitHub vacío'
-git -c safe.directory=C:/Users/CRISTIAN/Desktop/Modulith remote add origin $modulithRemote
-git -c safe.directory=C:/Users/CRISTIAN/Desktop/Modulith remote -v
-git -c safe.directory=C:/Users/CRISTIAN/Desktop/Modulith push -u origin main
+El remote `origin` ya esta configurado. No volver a crearlo ni conectar otro repositorio. Esta sincronizacion termina con un commit local: **no ejecuta push ni modifica la configuracion remota de Cloudflare**.
+
+Una vez que el usuario haya revisado y autorizado el resultado:
+
+```sh
+git push origin main
 ```
 
-El parámetro `safe.directory` se limita a cada comando porque este checkout tiene un propietario de Windows diferente; no modifica la confianza global de Git. La autenticación se realiza con la cuenta habitual de GitHub. No añadir credenciales ni tokens al remote ni al repositorio.
+El push puede disparar el despliegue automatico existente en Cloudflare. Comprobar alli que se conserva `main`, preset Astro, raiz del repositorio, `npm run build` y salida `dist`. No configurar Workers ni Functions. El dominio canonico local no configura DNS por si solo.
 
-## Conectar Cloudflare Pages cuando se autorice publicar
+## Noindex temporal
 
-La conexión y el primer deployment remoto siguen pendientes. En Cloudflare, crear un proyecto **Pages** mediante integración Git y seleccionar el repositorio real. Configurar `main`, preset Astro, `npm run build` y salida `dist`; no configurar Workers ni Functions. La creación mediante Git puede iniciar el primer deployment automáticamente.
+El homepage usa `src/layouts/ApprovedLayout.astro`; las rutas historicas y el 404 usan `src/layouts/BaseLayout.astro`. Ambos mantienen `<meta name="robots" content="noindex, nofollow">`. `public/robots.txt` permite los recursos para que los buscadores puedan leer ese meta.
 
-Después del deployment autorizado, agregar `modulith.com.co` en **Custom domains** del proyecto Pages y completar la validación/DNS que Cloudflare indique. El valor `site` y el canonical no crean DNS ni conectan el dominio por sí mismos. Verificar HTTPS y abrir `/` y `/preview/` desde el dominio real.
-
-## Noindex temporal y lanzamiento oficial
-
-`src/layouts/BaseLayout.astro` añade `<meta name="robots" content="noindex, nofollow">` a todas las páginas públicas, incluida la de error. `public/robots.txt` usa `Allow: /` para que los buscadores puedan renderizar recursos y leer el noindex. No hay sitemap ni bloqueo de CSS, JavaScript o fuentes.
-
-Para el lanzamiento oficial:
-
-1. Retirar el meta `robots` global de `src/layouts/BaseLayout.astro` (o cambiar su contenido a `index, follow`).
-2. Actualizar las comprobaciones de noindex en `tests/build.test.mjs` y `scripts/verify-preview.mjs` para el nuevo estado.
-3. Mantener `public/robots.txt` permitiendo recursos. No hay un `Disallow: /` que retirar.
-4. Ejecutar `npm run check`, `npm run build`, `npm test` y las pruebas de navegador; publicar el nuevo build cuando esté autorizado.
-5. Revisar en el HTML del dominio real que ya no se envíe noindex. Decidir por separado qué variantes de feedback deben seguir públicas antes de indexarlas.
-
-Noindex evita solicitar indexación, pero el sitio de feedback es público y no está protegido por autenticación.
-
-## Límites de esta entrega
-
-No se rediseña ni modifica copy, imágenes o UI. Se eliminó únicamente el diagnóstico server-side `/api/runtime/` y su infraestructura no utilizada por el homepage. El historial de planificación de backend se conserva como documentación; cualquier API futura requerirá una implementación y deployment autorizados por separado.
+No retirar noindex durante feedback. Para un lanzamiento indexable autorizado: revisar ambos layouts, tests de noindex y destino de las variantes historicas, reconstruir y verificar el HTML remoto. Noindex no protege el sitio mediante autenticacion.

@@ -1,0 +1,41 @@
+.trust-section { font-family: 'Instrument Sans', Arial, sans-serif; background: #edf0eb; color: #242c27; padding-block: 104px 96px; scroll-margin-top: 0; }
+.trust-heading h2 { margin: 0; max-width: 1100px; font-size: 52px; line-height: 1.15; font-weight: 500; text-wrap: balance; }
+.trust-intro { margin: 26px 0 0; max-width: 890px; font-size: 17px; line-height: 1.65; color: #505d53; }
+.trust-institutional { margin: 22px 0 0; font-size: 13px; line-height: 1.5; font-weight: 500; color: #4d6356; }
+.trust-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px 104px; margin-top: 64px; min-width: 0; }
+.trust-field { border-top: 1px solid #b8c2b7; padding-top: 28px; min-width: 0; }
+.trust-field-heading { display: flex; align-items: baseline; gap: 16px; }
+.trust-field-number { font-size: 11px; line-height: 1.4; color: #738271; font-variant-numeric: tabular-nums; flex: 0 0 20px; }
+.trust-field h3 { margin: 0; font-size: 13px; line-height: 1.4; font-weight: 600; text-transform: uppercase; color: #4d6356; }
+.trust-field p { margin: 24px 0 0; max-width: 540px; font-size: 24px; line-height: 1.45; }
+@media (min-width: 1680px) {
+  .trust-section { padding-block: 120px 112px; }
+  .trust-heading h2 { font-size: 60px; max-width: 1320px; }
+  .trust-intro { font-size: 18px; max-width: 980px; }
+  .trust-fields { gap: 64px 128px; margin-top: 72px; }
+  .trust-field p { font-size: 28px; max-width: 650px; }
+}
+@media (max-width: 1100px) and (min-width: 701px) {
+  .trust-section { padding-top: 72px; }
+  .trust-heading h2 { font-size: 42px; }
+  .trust-intro { font-size: 16px; }
+  .trust-fields { gap: 40px 48px; margin-top: 48px; }
+  .trust-field p { font-size: 21px; }
+}
+@media (max-width: 700px) {
+  .trust-section { padding-block: 52px 60px; }
+  .trust-heading h2 { font-size: 32px; line-height: 1.16; text-wrap: balance; }
+  .trust-intro { font-size: 15px; line-height: 1.6; margin-top: 20px; }
+  .trust-institutional { font-size: 12px; margin-top: 20px; }
+  .trust-fields { grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 40px; }
+  .trust-field { padding-top: 24px; }
+  .trust-field-heading { gap: 12px; }
+  .trust-field-number { font-size: 10px; flex-basis: 16px; }
+  .trust-field h3 { font-size: 12px; }
+  .trust-field p { font-size: 18px; line-height: 1.55; margin-top: 18px; max-width: none; }
+}
+@media (max-width: 359px) {
+  .trust-heading h2 { font-size: 29px; }
+  .trust-intro { font-size: 14px; }
+  .trust-field p { font-size: 17px; }
+}

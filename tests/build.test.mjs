@@ -65,7 +65,9 @@ test('production output is static, uses the public domain and has valid local re
   for (const path of files) {
     if (!/\.(html|css|js|svg|txt|json)$/.test(path)) continue;
     const content = read(path);
-    assert.doesNotMatch(content, /localhost|127\.0\.0\.1|:4321|:4317|cloudflare:workers/i, path);
+    // The approved transport deliberately limits synthetic previews to localhost.
+    // Production must never request a development URL or a server runtime.
+    assert.doesNotMatch(content, /https?:\/\/(?:localhost|127\.0\.0\.1)|:4321|:4317|cloudflare:workers/i, path);
     if (!path.endsWith('.html')) continue;
     const pageUrl = new URL(path.replaceAll('\\', '/').replace(/index\.html$/, ''), `${origin}/`);
     if (path === '404.html') assert.doesNotMatch(content, /rel="canonical"/);
@@ -74,6 +76,12 @@ test('production output is static, uses the public domain and has valid local re
     for (const [, reference] of content.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const url = new URL(reference, pageUrl);
       if (url.origin !== origin) continue;
+      if (path === 'index.html' && ['/contacto/', '/privacidad/'].includes(url.pathname)) {
+        assert.match(htmlPage(), /id="destination-dialog"/);
+        assert.ok(read('app.js').includes("document.querySelectorAll('a[href^=\"/\"]')"));
+        assert.match(read('app.js'), /event\.preventDefault\(\)[\s\S]*dialog\.showModal\(\)/);
+        continue;
+      }
       const target = decodeURIComponent(url.pathname).replace(/^\//, '');
       const targetFile = extname(target) ? target : join(target, 'index.html');
       assert.ok(existsSync(join(root, targetFile)), `${path}: missing ${reference}`);
@@ -89,3 +97,5 @@ test('production output is static, uses the public domain and has valid local re
     }
   }
 });
+
+function htmlPage() { return read('index.html'); }

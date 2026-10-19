@@ -1,0 +1,7 @@
+---
+import ApprovedLayout from '../layouts/ApprovedLayout.astro';
+import body from '../approved/home.html?raw';
+---
+<ApprovedLayout>
+  <Fragment set:html={body} />
+</ApprovedLayout>
