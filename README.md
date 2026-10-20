@@ -31,9 +31,9 @@ Las antiguas rutas `/preview/` y sus seis variantes se conservan como archivo hi
 
 ## Funcionalidades y limites actuales
 
-El quiz funciona en el navegador: ocho pasos, programa de vivienda, referencias visuales, hasta dos materiales, sintesis pre-lead, formulario y validaciones. La captura real y la generacion de render/planta siguen desactivadas, como en el original: no existe backend conectado ni politica de datos aprobada. No se simula un envio exitoso en produccion ni se envia PII a analytics. Los estados de simulacion solo son locales y usan datos sinteticos en pruebas.
+El quiz funciona en el navegador: ocho pasos, programa de vivienda, referencias visuales, hasta dos materiales, sintesis pre-lead, formulario y validaciones. Nombre, correo, telefono con indicativo, municipio, departamento y consentimiento son obligatorios. La captura y generacion real siguen desactivadas: el adaptador devuelve siempre `disabled`, sin red ni almacenamiento. Tampoco se permiten simulaciones locales de exito. No existe backend conectado ni politica aprobada.
 
-Los destinos `/contacto/` y `/privacidad/` siguen siendo pendientes del preview aprobado: el JavaScript existente los intercepta y muestra su dialogo explicativo. No se inventaron paginas, correos, telefonos ni endpoints. La coleccion de guias sigue vacia.
+`/privacidad/` es una pagina estatica consultable, claramente pendiente de revision; no es una politica aprobada. Se abre en otra pestana sin perder el formulario. Ver [docs/PRIVACY_REVIEW.md](docs/PRIVACY_REVIEW.md) para los bloqueos legales y operativos. `/contacto/` mantiene su dialogo de destino pendiente. No se inventaron correos ni telefonos empresariales. La coleccion de guias sigue vacia.
 
 ## Comprobaciones
 

@@ -26,8 +26,8 @@ export interface HouseBrief {
 export interface ProposalRequest {
   schema_version: 'modulith-proposal-request-v1';
   attempt_id: string;
-  brief: HouseBrief;
-  contact: { name: string; email: string; whatsapp?: string };
+  brief: HouseBrief & { location: NonNullable<HouseBrief['location']> };
+  contact: { name: string; email: string; whatsapp: string };
   consent: { authorized: true; version: string | null };
 }
 

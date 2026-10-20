@@ -107,11 +107,17 @@
   }
   function validateContact(contact) {
     const errors = {};
-    if (contact.name.trim().length < 2 || contact.name.trim().length > 80) errors.name = 'Escribe un nombre de entre 2 y 80 caracteres.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim()) || contact.email.length > 254) errors.email = 'Revisa el email. Por ejemplo: nombre@dominio.com.';
-    if (contact.whatsapp && !/^\+[1-9]\d{7,14}$/.test(contact.whatsapp.replace(/[\s()-]/g, ''))) errors.whatsapp = 'Escribe el número con indicativo. Por ejemplo: +57 300 000 0000.';
-    if (!contact.authorization) errors.authorization = 'Necesitamos tu autorización para atender esta solicitud.';
-    if ((contact.municipality || '').length > 80 || (contact.department || '').length > 80) errors.location = 'La ubicación debe tener máximo 80 caracteres por campo.';
+    const name = (contact.name || '').trim();
+    const email = (contact.email || '').trim();
+    const phone = (contact.whatsapp || '').replace(/[\s()-]/g, '');
+    if (!name || name.length > 80) errors.name = 'Escribe tu nombre, con un máximo de 80 caracteres.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.includes('..') || email.length > 254) errors.email = 'Escribe un correo válido. Por ejemplo: nombre@dominio.com.';
+    if (!/^\+[1-9]\d{7,14}$/.test(phone) || (phone.startsWith('+57') && !/^\+57\d{10}$/.test(phone))) errors.whatsapp = 'Escribe un teléfono con indicativo y número completo. En Colombia: +57 y 10 dígitos.';
+    for (const [key, label] of [['municipality', 'la ciudad o municipio'], ['department', 'el departamento']]) {
+      const value = (contact[key] || '').trim();
+      if (value.length < 2 || value.length > 80 || !/\p{L}/u.test(value)) errors[key] = `Escribe ${label}, con un máximo de 80 caracteres.`;
+    }
+    if (contact.authorization !== true) errors.authorization = 'Marca la autorización de tratamiento de datos para continuar.';
     return errors;
   }
   function payload(answers, contact, route, config, attemptId) {
@@ -120,8 +126,8 @@
     const landStates = { owned: 'tengo_lote', buying: 'negociacion', searching: 'buscando', none: 'aun_no_lo_se' };
     const body = {
       name: contact.name.trim(), service: services[answers.intent], land_status: landStates[answers.land],
-      municipality: answers.locationUnknown ? (contact.municipality || '').trim() : answers.municipality.trim(),
-      department: answers.locationUnknown ? (contact.department || '').trim() : answers.department.trim(),
+      municipality: contact.municipality.trim(),
+      department: contact.department.trim(),
       channel: 'email', authorization: true, form_version: config.formVersion, consent_version: config.consentVersion,
       attempt_id: attemptId, website: contact.website || '',
       message: JSON.stringify(brief(answers))
@@ -134,8 +140,8 @@
   function proposalRequest(answers, contact, config, attemptId) {
     if (Object.keys(validateContact(contact)).length) throw new Error('Invalid contact');
     const project = brief(answers);
-    if (!project.location && contact.municipality?.trim() && contact.department?.trim()) project.location = { municipality: contact.municipality.trim(), department: contact.department.trim() };
-    return { schema_version: 'modulith-proposal-request-v1', attempt_id: attemptId, brief: project, contact: { name: contact.name.trim(), email: contact.email.trim(), ...(contact.whatsapp ? { whatsapp: contact.whatsapp.replace(/[\s()-]/g, '') } : {}) }, consent: { authorized: true, version: config.consentVersion } };
+    project.location = { municipality: contact.municipality.trim(), department: contact.department.trim() };
+    return { schema_version: 'modulith-proposal-request-v1', attempt_id: attemptId, brief: project, contact: { name: contact.name.trim(), email: contact.email.trim(), whatsapp: contact.whatsapp.replace(/[\s()-]/g, '') }, consent: { authorized: true, version: config.consentVersion } };
   }
   return { questions, blank, label, validateStep, selectMaterial, result, brief, proposalRequest, validateContact, payload };
 });

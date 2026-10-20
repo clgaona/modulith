@@ -76,7 +76,7 @@ test('production output is static, uses the public domain and has valid local re
     for (const [, reference] of content.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const url = new URL(reference, pageUrl);
       if (url.origin !== origin) continue;
-      if (path === 'index.html' && ['/contacto/', '/privacidad/'].includes(url.pathname)) {
+      if (path === 'index.html' && url.pathname === '/contacto/') {
         assert.match(htmlPage(), /id="destination-dialog"/);
         assert.ok(read('app.js').includes("document.querySelectorAll('a[href^=\"/\"]')"));
         assert.match(read('app.js'), /event\.preventDefault\(\)[\s\S]*dialog\.showModal\(\)/);

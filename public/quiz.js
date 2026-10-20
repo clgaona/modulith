@@ -4,17 +4,16 @@
   const config = window.MODULITH_QUIZ_CONFIG;
   if (!section || !domain || !config || !window.ModulithQuizTransport) return;
   const byId = id => document.getElementById(id);
-  const transport = window.ModulithQuizTransport.create({ config, location: window.location, fetch: window.fetch.bind(window) });
+  const transport = window.ModulithQuizTransport.create();
   const answers = domain.blank();
   const panes = [...section.querySelectorAll('[data-quiz-pane]')];
   const contactForm = byId('quiz-contact');
-  const errorIds = { name: 'quiz-name-error', email: 'quiz-email-error', whatsapp: 'quiz-whatsapp-error', authorization: 'quiz-consent-error' };
-  const inputIds = { name: 'quiz-name', email: 'quiz-email', whatsapp: 'quiz-whatsapp', authorization: 'quiz-consent' };
+  const errorIds = { name: 'quiz-name-error', email: 'quiz-email-error', whatsapp: 'quiz-whatsapp-error', municipality: 'quiz-contact-city-error', department: 'quiz-contact-department-error', authorization: 'quiz-consent-error' };
+  const inputIds = { name: 'quiz-name', email: 'quiz-email', whatsapp: 'quiz-whatsapp', municipality: 'quiz-contact-city', department: 'quiz-contact-department', authorization: 'quiz-consent' };
   let index = 0;
   let route = null;
   let busy = false;
   let attemptId = null;
-  let signature = '';
   const node = (tag, text, className) => {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -170,11 +169,15 @@
     index = 0;
     byId('quiz-consent').checked = false;
     attemptId = null;
-    signature = '';
     renderQuestion();
   });
   byId('quiz-receive').addEventListener('click', () => {
-    byId('quiz-contact-location').hidden = !answers.locationUnknown;
+    for (const key of ['municipality', 'department']) {
+      const input = byId(inputIds[key]);
+      if (!input.value.trim() && !answers.locationUnknown) input.value = answers[key];
+    }
+    clearFieldErrors();
+    byId('quiz-consent').checked = false;
     byId('quiz-submit-error').hidden = true;
     byId('quiz-submit-status').textContent = '';
     show('contact', 'quiz-contact-title');
@@ -202,7 +205,7 @@
     byId('quiz-submit').disabled = value;
     byId('quiz-return').disabled = value;
     contactForm.setAttribute('aria-busy', String(value));
-    byId('quiz-submit').firstElementChild.textContent = value ? 'Preparando envío…' : 'Recibir mi propuesta';
+    byId('quiz-submit').firstElementChild.textContent = value ? 'Comprobando…' : 'Recibir mi propuesta';
   }
   contactForm.addEventListener('submit', async event => {
     event.preventDefault();
@@ -211,44 +214,27 @@
     const contact = { name: data.get('name') || '', email: data.get('email') || '', whatsapp: data.get('whatsapp') || '', municipality: data.get('municipality') || '', department: data.get('department') || '', authorization: byId('quiz-consent').checked, website: data.get('website') || '' };
     const errors = domain.validateContact(contact);
     byId('quiz-submit-error').hidden = true;
-    if (Object.keys(errors).length) { displayFieldErrors(errors); return; }
+    if (Object.keys(errors).length) {
+      displayFieldErrors(errors);
+      byId('quiz-submit-error').textContent = 'Revisa los campos señalados para continuar.';
+      byId('quiz-submit-error').hidden = false;
+      return;
+    }
     clearFieldErrors();
-    const requestId = attemptId || window.crypto.randomUUID();
-    // The structured request is the future backend boundary; the legacy adapter remains active.
-    const request = domain.proposalRequest(answers, contact, config, requestId);
-    const candidate = domain.payload(answers, contact, route, config, request.attempt_id);
-    const { attempt_id, ...contents } = candidate;
-    const nextSignature = JSON.stringify(contents);
-    if (signature && signature !== nextSignature) candidate.attempt_id = window.crypto.randomUUID();
-    attemptId = candidate.attempt_id;
-    signature = nextSignature;
+    attemptId ||= window.crypto.randomUUID();
+    // This structured request is the integration boundary, not a network call.
+    const request = domain.proposalRequest(answers, contact, config, attemptId);
     setBusy(true);
-    byId('quiz-submit-status').textContent = transport.previewMode ? 'Probando el envío local. No se transmite ningún dato.' : 'Preparando tu solicitud…';
     let response;
-    try { response = await transport.submit(candidate); } catch { response = { ok: false, code: 'unavailable' }; }
+    try { response = await transport.submit(request); }
+    catch { response = { ok: false, code: 'unavailable' }; }
     setBusy(false);
     byId('quiz-submit-status').textContent = '';
-    if (response.ok) {
-      byId('quiz-success-title').textContent = response.simulated ? 'Así se verá la confirmación de tu solicitud.' : 'Recibimos tu solicitud.';
-      byId('quiz-success-message').textContent = response.simulated ? 'Esta es una prueba local: no se recibieron ni guardaron datos. Cuando conectemos el servicio, aquí confirmaremos la recepción para preparar tu render conceptual, planta conceptual y ruta inicial. No se ha generado ningún activo.' : 'Tenemos tu solicitud para preparar un render conceptual, una planta conceptual y una ruta inicial. Esta confirmación acredita la recepción, no el inicio ni la finalización de la generación. Te responderemos por email.';
-      byId('quiz-success-context').textContent = route.context;
-      byId('quiz-reference').textContent = `Referencia: ${response.reference}`;
-      show('success', 'quiz-success-title');
-    } else {
-      let fieldErrorShown = false;
-      if (response.code === 'fields') {
-        const messages = { name: 'Revisa tu nombre.', email: 'Revisa tu email.', whatsapp: 'Revisa tu WhatsApp con indicativo.', authorization: 'Necesitamos tu autorización para atender la solicitud.' };
-        const safeErrors = {};
-        Object.keys(response.fields).forEach(key => { if (Object.hasOwn(messages, key) && !byId(inputIds[key]).disabled) safeErrors[key] = messages[key]; });
-        fieldErrorShown = Object.keys(safeErrors).length > 0;
-        displayFieldErrors(safeErrors);
-      }
-      const messages = { disabled: 'La generación y el envío todavía no están activos. Tu síntesis sigue disponible aquí; no se han enviado ni guardado tus datos.', rate: 'Hay demasiados intentos seguidos. Espera un momento y vuelve a intentarlo. Tus datos siguen en esta pantalla.', fields: 'Revisa los campos señalados antes de volver a enviar.', configuration: 'El envío no está disponible. Puedes volver a tu síntesis.', unavailable: 'No pudimos confirmar la recepción. Tus datos siguen en esta pantalla. Intenta de nuevo o vuelve a tu síntesis.' };
-      byId('quiz-submit-error').textContent = response.code === 'fields' && !fieldErrorShown ? 'Algunos datos no fueron aceptados. Revísalos y vuelve a intentarlo.' : messages[response.code] || messages.unavailable;
-      byId('quiz-submit-error').hidden = false;
-    }
+    byId('quiz-submit-error').textContent = response.code === 'disabled'
+      ? 'El formulario aún no recibe solicitudes. No se han enviado ni guardado tus datos.'
+      : 'El envío no está disponible. Puedes volver a tu síntesis.';
+    byId('quiz-submit-error').hidden = false;
   });
-  byId('quiz-preview-notice').textContent = transport.previewMode ? 'Prueba local con datos ficticios: el envío se simula y no sale de este navegador.' : !config.captureEnabled ? 'Vista previa: usa datos ficticios. El envío y la política de datos todavía no están activos.' : '';
   byId('quiz-application').hidden = false;
   byId('quiz-fallback').hidden = true;
   if (['#empieza', '#tu-proyecto'].includes(window.location.hash)) {

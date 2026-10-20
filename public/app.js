@@ -63,6 +63,7 @@
   }
   const dialog = document.querySelector('#destination-dialog');
   document.querySelectorAll('a[href^="/"]').forEach(link => {
+    if (link.getAttribute('href') === '/privacidad/') return;
     link.addEventListener('click', event => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();

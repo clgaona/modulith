@@ -37,9 +37,9 @@ npm run test:browser
 
 ## Quiz y destinos pendientes
 
-El quiz aprobado es frontend estatico y conserva sus ocho pasos y validaciones. `public/quiz-config.js` mantiene `captureEnabled: false` y `policyApproved: false`; `/api/contacto` no existe. No activar esos flags sin backend y politica aprobados. Los contratos de `src/approved/quiz-contract.d.ts` preparan la integracion futura, no la implementan.
+El quiz aprobado es frontend estatico y conserva sus ocho pasos y validaciones. `public/quiz-config.js` mantiene `captureEnabled: false` y `policyApproved: false`; `/api/contacto` no existe. El adaptador de transporte es inerte incluso si cambian los flags o se solicitan simulaciones locales. Los contratos de `src/approved/quiz-contract.d.ts` preparan la integracion futura, no la implementan. Ver `docs/PRIVACY_REVIEW.md` antes de reemplazar el adaptador o activar captura.
 
-Los enlaces pendientes `/contacto/` y `/privacidad/` abren el dialogo del preview mediante `public/app.js`, tal como en el original aprobado. No se eliminaron funcionalidades para compilar. La generacion real, el almacenamiento y la entrega requieren otra implementacion autorizada.
+`/contacto/` mantiene el dialogo pendiente del preview. `/privacidad/` es una pagina estatica real, expresamente pendiente de revision y no apta como politica definitiva. Su enlace no se intercepta y abre otra pestana. La generacion real, el almacenamiento y la entrega requieren otra implementacion autorizada.
 
 ## Publicacion: requiere autorizacion
 

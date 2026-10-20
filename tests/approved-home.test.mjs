@@ -21,6 +21,7 @@ const transportScope = { module: { exports: {} }, URLSearchParams };
 vm.runInNewContext(read('public/quiz-transport.js'), transportScope);
 
 const answers = () => ({ ...domain.blank(), intent: 'design_build', land: 'owned', municipality: 'Ciudad de prueba', department: 'Departamento de prueba', design: 'none', timing: '6_12', floors: 'two', bedrooms: 'three', area: '100_150', style: 'contemporary', materials: ['wood', 'stone'] });
+const contact = () => ({ name: 'Prueba Sintetica', email: 'prueba@example.com', whatsapp: '+57 300 000 0000', municipality: 'Medellín', department: 'Antioquia', authorization: true });
 
 test('Astro renders the approved body unchanged, without old homepage styles', () => {
   assert.equal(hash(sourceBody), manifest.bodySha256);
@@ -90,6 +91,7 @@ test('final refinements preserve copy, disclosures in the quiz and protected sec
 
 test('the eight-step quiz validates program and produces the structured conceptual brief', () => {
   assert.equal(domain.questions.length, 8);
+  assert.equal(hash(JSON.stringify(domain.questions)), 'd5a21f75a158a256540a82fe6a7fbfc2041fbf21b60ab31767e5ca2da0cce3fb');
   assert.equal(domain.questions[5].key, 'program');
   assert.equal(domain.questions[6].key, 'style');
   assert.equal(domain.questions[7].key, 'materials');
@@ -121,27 +123,76 @@ test('pre-lead shows no complete render, plan or route, and contact errors are v
   const preLead = html.slice(html.indexOf('data-quiz-pane="result"'), html.indexOf('<form id="quiz-contact"'));
   assert.doesNotMatch(preLead, /<img|quiz-result-steps/);
   assert.match(preLead, /awaiting-lead/);
-  assert.deepEqual(Object.keys(domain.validateContact({ name: '', email: 'bad', whatsapp: 'bad', authorization: false })).sort(), ['authorization', 'email', 'name', 'whatsapp']);
-  assert.deepEqual(plain(domain.validateContact({ name: 'Prueba Sintetica', email: 'prueba@example.com', whatsapp: '', authorization: true })), {});
+  assert.deepEqual(Object.keys(domain.validateContact({ name: '', email: 'bad', whatsapp: 'bad', authorization: false })).sort(), ['authorization', 'department', 'email', 'municipality', 'name', 'whatsapp']);
+  assert.deepEqual(plain(domain.validateContact(contact())), {});
   assert.doesNotMatch(read('public/quiz.js'), /localStorage|sessionStorage|sendBeacon|gtag\(/);
 });
 
-test('production keeps capture disabled and cannot enable local simulation by query string', async () => {
+test('all six contact fields are required and validation stays field-specific', () => {
+  for (const key of ['name', 'email', 'whatsapp', 'municipality', 'department']) {
+    assert.deepEqual(Object.keys(domain.validateContact({ ...contact(), [key]: '  ' })), [key]);
+  }
+  assert.ok(domain.validateContact({ ...contact(), authorization: 'true' }).authorization);
+  assert.ok(domain.validateContact({ ...contact(), name: 'a'.repeat(81) }).name);
+  assert.ok(domain.validateContact({ ...contact(), email: 'not-an-email' }).email);
+  assert.ok(domain.validateContact({ ...contact(), email: 'a@b..com' }).email);
+  for (const whatsapp of ['+57', '3000000000', '+57 300 000 000', '+57 300 000 00000', '+57 abc', '+0000000000', '+1234567890123456']) {
+    assert.ok(domain.validateContact({ ...contact(), whatsapp }).whatsapp, whatsapp);
+  }
+  for (const whatsapp of ['+57 300 000 0000', '+57 (604) 000-0000', '+1 202 555 0100']) {
+    assert.equal(domain.validateContact({ ...contact(), whatsapp }).whatsapp, undefined, whatsapp);
+  }
+  assert.ok(domain.validateContact({ ...contact(), municipality: '1234' }).municipality);
+  assert.ok(domain.validateContact({ ...contact(), department: 'a'.repeat(81) }).department);
+  for (const id of ['quiz-name', 'quiz-email', 'quiz-whatsapp', 'quiz-contact-city', 'quiz-contact-department', 'quiz-consent']) {
+    const input = html.match(new RegExp(`<input[^>]*id="${id}"[^>]*>`))[0];
+    assert.match(input, /\brequired\b/);
+    assert.match(input, /aria-describedby="[^"]+-error"/);
+    if (id === 'quiz-consent') assert.doesNotMatch(input, /\bchecked\b/);
+  }
+  assert.match(html, /id="quiz-whatsapp"[^>]*value="\+57 "/);
+  assert.doesNotMatch(html, /id="quiz-contact-location"[^>]*\bhidden\b/);
+});
+
+test('the structured request uses the confirmed contact location without changing quiz answers', () => {
+  const a = answers();
+  const original = JSON.stringify(a);
+  const request = domain.proposalRequest(a, contact(), config, 'synthetic-attempt');
+  assert.deepEqual(plain(request.brief.location), { municipality: 'Medellín', department: 'Antioquia' });
+  assert.equal(request.contact.whatsapp, '+573000000000');
+  assert.equal(JSON.stringify(a), original);
+  const payload = domain.payload(a, contact(), domain.result(a), config, 'synthetic-attempt');
+  assert.equal(payload.municipality, 'Medellín');
+  assert.equal(payload.department, 'Antioquia');
+  assert.equal(domain.proposalRequest({ ...a, locationUnknown: true, municipality: '', department: '' }, contact(), config, 'synthetic-attempt').brief.location.department, 'Antioquia');
+  assert.throws(() => domain.proposalRequest(a, { ...contact(), whatsapp: '' }, config, 'synthetic-attempt'), /Invalid contact/);
+});
+
+test('privacy is a real pending page and the removed technical paragraphs never reappear', () => {
+  const privacy = read('dist/privacidad/index.html');
+  assert.match(privacy, /Pendiente de revisión y aprobación/);
+  assert.match(privacy, /todavía no contiene una política aprobada/);
+  assert.match(privacy, /Razón social/);
+  assert.match(privacy, /name="robots" content="noindex, nofollow"/);
+  assert.match(html, /href="\/privacidad\/" target="_blank" rel="noopener"/);
+  assert.match(read('public/app.js'), /if \(link\.getAttribute\('href'\) === '\/privacidad\/'\) return;/);
+  assert.doesNotMatch(html + read('public/quiz.js'), /quiz-visual-status|quiz-preview-notice|Vista previa: usa datos ficticios|Todavía no hay activos personalizados generados/);
+  assert.match(html, /Envío no disponible/);
+  assert.match(html, /Pendiente de generar/);
+  assert.match(html, /Pendiente de entrega/);
+});
+
+test('capture and all local success simulations are disabled without network or storage', async () => {
   assert.equal(config.captureEnabled, false);
   assert.equal(config.policyApproved, false);
   assert.equal(config.consentVersion, null);
+  assert.equal(config.preview, false);
   let requests = 0;
-  const transport = transportScope.module.exports.create({ config, location: { hostname: 'modulith.com.co', search: '?quizPreview=success' }, fetch: () => { requests++; throw new Error('Unexpected request'); } });
-  assert.equal(transport.previewMode, '');
-  assert.equal((await transport.submit({})).code, 'disabled');
-  assert.equal(requests, 0);
-});
-
-test('local mock states remain honest and never send personal data', async () => {
-  for (const mode of ['success', 'error', 'field', 'rate']) {
-    const transport = transportScope.module.exports.create({ config, location: { hostname: '127.0.0.1', search: `?quizPreview=${mode}` }, fetch: () => { throw new Error('Unexpected network request'); }, wait: () => Promise.resolve() });
-    const result = await transport.submit({});
-    if (mode === 'success') assert.equal(result.simulated, true);
-    else assert.equal(result.ok, false);
+  for (const hostname of ['modulith.com.co', '127.0.0.1', 'localhost']) for (const mode of ['success', 'error', 'field', 'rate']) {
+    const transport = transportScope.module.exports.create({ config: { ...config, captureEnabled: true, policyApproved: true, consentVersion: 'unapproved-test', preview: true }, location: { hostname, search: `?quizPreview=${mode}` }, fetch: () => { requests++; throw new Error('Unexpected request'); } });
+    assert.deepEqual(plain(await transport.submit({ synthetic: true })), { ok: false, code: 'disabled' });
   }
+  assert.equal(requests, 0);
+  assert.doesNotMatch(read('public/quiz-transport.js'), /fetch|localStorage|sessionStorage|sendBeacon|success|setTimeout/);
+  assert.doesNotMatch(read('public/quiz.js'), /show\('success'|response\.simulated|window\.fetch|Recibimos tu solicitud/);
 });

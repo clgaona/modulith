@@ -22,8 +22,8 @@ async function verifyApprovedQuiz(page) {
   await page.locator('#quiz-next').click();
   await page.getByLabel('Sí, ya es mío', { exact: true }).check();
   await page.locator('#quiz-next').click();
-  await page.getByLabel('Ciudad o municipio', { exact: true }).fill('Ciudad de prueba');
-  await page.getByLabel('Departamento', { exact: true }).fill('Departamento de prueba');
+  await page.locator('#quiz-options').getByLabel('Ciudad o municipio', { exact: true }).fill('Ciudad de prueba');
+  await page.locator('#quiz-options').getByLabel('Departamento', { exact: true }).fill('Departamento de prueba');
   await page.locator('#quiz-next').click();
   await page.getByLabel('Voy a empezar de cero', { exact: true }).check();
   await page.locator('#quiz-next').click();
@@ -52,10 +52,13 @@ async function verifyApprovedQuiz(page) {
   assert.equal(await page.locator('#quiz-name-error').isVisible(), true);
   await page.locator('#quiz-name').fill('Prueba Sintetica');
   await page.locator('#quiz-email').fill('prueba@example.com');
+  await page.locator('#quiz-whatsapp').fill('+57 300 000 0000');
+  assert.equal(await page.locator('#quiz-contact-city').inputValue(), 'Ciudad de prueba');
+  assert.equal(await page.locator('#quiz-contact-department').inputValue(), 'Departamento de prueba');
   await page.locator('#quiz-consent').check();
   await page.locator('#quiz-submit').click();
   await page.locator('#quiz-submit-error').waitFor({ state: 'visible' });
-  assert.match(await page.locator('#quiz-submit-error').innerText(), /todavía no están activos/);
+  assert.match(await page.locator('#quiz-submit-error').innerText(), /no recibe solicitudes/);
 }
 
 try {

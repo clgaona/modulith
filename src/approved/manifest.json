@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "source": "creative-sprint/round-1/prototype",
   "sourceHtmlSha256": "a27e4948e4e390f07195b0f98a17a9c5bf3068551e26d584f0485402fb344d8a",
-  "bodySha256": "e6f814c3e97a297561192eaffe399fba08015fe033c03cb6b8d0b1a80a5447e8",
-  "revision": { "date": "2026-10-19", "baseCommit": "a86e8cb", "scope": "Official favicon, hero copy/mobile spacing, quiz intro and footer cleanup" },
+  "bodySha256": "508f0ce3a0f0b8d51f8df06fc4a9b60d54e299e2c96a18b02c53de15d85712c7",
+  "revision": { "date": "2026-10-20", "baseCommit": "e425d5a", "scope": "Final quiz contact validation, pending privacy route and inert transport" },
   "styles": [
     "styles.css",
     "problem.css",
@@ -65,8 +65,8 @@
     },
     {
       "path": "quiz.css",
-      "bytes": 16936,
-      "sha256": "7f2ccb1b3698d91b902f3d846c2879ba8c759b7bfb7095110797472afcb4ff63"
+      "bytes": 16924,
+      "sha256": "4868ffbb6f41e82a106fa9537c4612b78645f5c5eaa6fd923abba9cc997794c8"
     },
     {
       "path": "faq.css",
@@ -85,8 +85,8 @@
     },
     {
       "path": "app.js",
-      "bytes": 4711,
-      "sha256": "b69d88d04f1595fdf1e475e8cd36da41d9a5f27267c57cf6e35fdfdb66387da7"
+      "bytes": 4773,
+      "sha256": "e145d4844feda3f8a2677b858446e93632679e61aff4d9ce533d4671328a873d"
     },
     {
       "path": "problem.js",
@@ -115,23 +115,23 @@
     },
     {
       "path": "quiz-config.js",
-      "bytes": 211,
-      "sha256": "447cca52870c46c5a01c7775587c75f92e5a9f52bdbac40a84386af83af36a3b"
+      "bytes": 212,
+      "sha256": "1d0d3b385d161d94b59f346a95e1424721123e27f0feeead39313988124022ae"
     },
     {
       "path": "quiz-domain.js",
-      "bytes": 14084,
-      "sha256": "9834f69ffc416f7d8e6138b9427e6d6be5c448e2f9b20d267792eb62fa7f6ab7"
+      "bytes": 14158,
+      "sha256": "6aa9b4a7c85dcb4ce97eaaae28fefce9d7306c8c7ac7a25711f53aca7dc535d3"
     },
     {
       "path": "quiz-transport.js",
-      "bytes": 2481,
-      "sha256": "f6b0998284e40900ba6c5d42316dd3127889168605e75314055a991b36f8e43b"
+      "bytes": 450,
+      "sha256": "b6f5440a09cf960d815a7474364236cd5fbf4248d18a18c02506ceba1afc00f0"
     },
     {
       "path": "quiz.js",
-      "bytes": 15580,
-      "sha256": "53c2b4ed6fdb9224a1dc5032d243820bf6c6d291be966a35b82563b7ac02f654"
+      "bytes": 13091,
+      "sha256": "b87d1fab0b955504eeb2fff01b9de6988f06a3637f1ec136bcf604c4a38e3890"
     },
     {
       "path": "faq-config.js",
