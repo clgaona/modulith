@@ -2,19 +2,20 @@
 
 ## Estado bloqueado para captura real
 
-`/privacidad/` es una pagina estatica consultable, claramente pendiente de revision. No contiene una politica legal inventada ni aprobada. Se abre en otra pestana desde el formulario para conservar las respuestas transitorias. El consentimiento permanece desmarcado inicialmente.
+`/privacidad/` contiene la politica consolidada suministrada por el responsable: version 1.0, para aprobacion interna, elaborada el 20 de octubre de 2026. La fuente esta en `src/approved/privacy.md`. Se conservaron los 17 apartados, las listas y el texto del adjunto; solo se adapto el marcado de encabezados y enlaces. La entrada en vigor y la fecha de aprobacion siguen pendientes. No es una politica aprobada ni habilita captura real.
+
+El documento identifica a MODULITH S.A.S., NIT 900723127-4, y conserva la direccion, el telefono y el canal `constructora.veta@gmail.com` proporcionados en el adjunto. No se cambiaron los contactos del resto del sitio. Tanto el enlace independiente del formulario como la expresion enlazada dentro de la autorizacion abren el documento completo en otra pestana para conservar las respuestas transitorias. El consentimiento permanece desmarcado inicialmente.
 
 Antes de activar captura, el responsable de Modulith debe confirmar:
 
-- Razon social e identificacion tributaria; identidad del responsable del tratamiento.
-- Domicilio, direccion, email y telefono reales de contacto.
-- Persona o area y canal efectivo para ejercer derechos; procedimiento de atencion aprobado.
-- Finalidades y alcance del tratamiento para la propuesta conceptual; texto de autorizacion aprobado.
-- Proveedores de almacenamiento, generacion y correo; ubicaciones y transferencias aplicables.
-- Conservacion, eliminacion, controles de acceso y proteccion.
-- Version, vigencia y aprobacion final de la politica y el consentimiento.
+- Aprobacion formal de la politica y de la autorizacion; fechas de aprobacion y entrada en vigor.
+- Designacion interna de Administracion como area encargada de atender derechos y operacion efectiva del procedimiento descrito.
+- Periodo operativo de conservacion de leads no contratados y procedimientos de revision, eliminacion o anonimizacion.
+- Proveedores de almacenamiento, generacion y correo; condiciones, acuerdos, ubicaciones y transmisiones o transferencias aplicables antes de habilitarlos.
+- Backend, controles de acceso, seguridad y respuesta ante incidentes en los servicios que realmente se implementen.
+- Evidencia verificable de autorizacion previa, expresa e informada: version aprobada, finalidades, momento y mecanismos de consulta y revocatoria.
 
-Referencia institucional, no sustituto de revision juridica: [SIC: identificacion del responsable y cambios de politica](https://sedeelectronica.sic.gov.co/publicaciones/boletin-juridico/boletin/cambios-sustanciales-en-politica-de-tratamientos-de-datos-personales).
+La integracion conserva el contenido suministrado; no constituye revision juridica ni aprobacion de la politica. La mencion condicional de cookies y medicion en el documento no instala esas herramientas.
 
 ## Formulario preparado, no operativo
 
@@ -24,4 +25,4 @@ No hay catalogo geografico de Colombia en el proyecto. Se mantienen campos libre
 
 `quiz-transport.js` es un adaptador inerte: siempre devuelve `disabled`, incluso con parametros locales de simulacion o flags alterados. No hace fetch, no guarda datos, no genera referencias ficticias ni confirma recepcion. El formulario solo valida en memoria durante la pagina abierta. No hay localStorage, sessionStorage, envio a analytics ni PII en URL. No usar datos reales para la revision.
 
-El contrato `ProposalRequest` queda preparado con telefono y ubicacion obligatorios. Una integracion futura exige reemplazar el adaptador inerte y validar todo tambien en servidor; cambiar flags no activa el formulario. Backend, politica y canales reales siguen pendientes de aprobacion y pruebas.
+El contrato `ProposalRequest` queda preparado con telefono y ubicacion obligatorios. Una integracion futura exige reemplazar el adaptador inerte y validar todo tambien en servidor; cambiar flags no activa el formulario. `captureEnabled` y `policyApproved` permanecen en `false`, y `consentVersion` en `null`. La politica consolidada y la nueva autorizacion aun requieren aprobacion, implementacion verificable y pruebas antes de recibir datos.

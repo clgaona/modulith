@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "source": "creative-sprint/round-1/prototype",
   "sourceHtmlSha256": "a27e4948e4e390f07195b0f98a17a9c5bf3068551e26d584f0485402fb344d8a",
-  "bodySha256": "508f0ce3a0f0b8d51f8df06fc4a9b60d54e299e2c96a18b02c53de15d85712c7",
-  "revision": { "date": "2026-10-20", "baseCommit": "e425d5a", "scope": "Final quiz contact validation, pending privacy route and inert transport" },
+  "bodySha256": "4b18e8db8fe6651174ee65c4964005de6231d635d355c724ca9f2738f283ebf1",
+  "revision": { "date": "2026-10-20", "baseCommit": "4578985", "scope": "Consolidated policy for internal approval and exact linked quiz authorization; capture remains disabled" },
   "styles": [
     "styles.css",
     "problem.css",
@@ -65,8 +65,8 @@
     },
     {
       "path": "quiz.css",
-      "bytes": 16924,
-      "sha256": "4868ffbb6f41e82a106fa9537c4612b78645f5c5eaa6fd923abba9cc997794c8"
+      "bytes": 17065,
+      "sha256": "a95e1a0eba4fdad424825db66c7f93a26be76949206a858e2086c13e56a5f1b5"
     },
     {
       "path": "faq.css",

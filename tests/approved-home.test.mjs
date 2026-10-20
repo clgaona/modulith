@@ -168,12 +168,44 @@ test('the structured request uses the confirmed contact location without changin
   assert.throws(() => domain.proposalRequest(a, { ...contact(), whatsapp: '' }, config, 'synthetic-attempt'), /Invalid contact/);
 });
 
-test('privacy is a real pending page and the removed technical paragraphs never reappear', () => {
+test('the consolidated policy preserves all sections, contact links and pending approvals', () => {
   const privacy = read('dist/privacidad/index.html');
-  assert.match(privacy, /Pendiente de revisión y aprobación/);
-  assert.match(privacy, /todavía no contiene una política aprobada/);
-  assert.match(privacy, /Razón social/);
+  const policy = read('src/approved/privacy.md');
+  const textOnly = value => value.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/^#{1,6} /gm, '').replace(/\*\*/g, '').replace(/\s+/g, ' ').trim();
+  // Fingerprint of the supplied document, ignoring only Markdown formatting.
+  assert.equal(hash(textOnly(policy)), '2259481528758036b67856006404c7bdbdcb57bbcc061a26e4da81e139d1d25a');
+  const headings = [...policy.matchAll(/^## (.+)$/gm)].map(match => match[1]);
+  assert.equal(headings.length, 17);
+  const renderedHeadings = [...privacy.matchAll(/<h2 id="([^"]+)"[^>]*>([^<]+)<\/h2>/g)];
+  assert.deepEqual(renderedHeadings.map(match => match[2]), headings);
+  for (const [index, heading] of headings.entries()) assert.ok(heading.startsWith(`${index + 1}. `));
+  for (const heading of renderedHeadings) assert.ok(privacy.includes(`href="#${heading[1]}"`));
+  assert.match(privacy, /Versión 1.0 — Para aprobación interna/);
+  assert.match(privacy, /Fecha de entrada en vigor:<\/strong> Pendiente de aprobación/);
+  assert.match(privacy, /Fecha de aprobación:<\/strong> pendiente/);
+  assert.match(privacy, /La designación de esta área deberá confirmarse internamente/);
+  assert.match(privacy, /Periodo operativo específico para leads no contratados:<\/strong> pendiente de aprobación e implementación/);
+  assert.match(privacy, /después de definir y revisar los proveedores tecnológicos/);
+  assert.match(privacy, /MODULITH S\.A\.S\./);
+  assert.match(privacy, /900723127-4/);
+  assert.doesNotMatch(privacy, /Constructora Veta/i);
+  assert.equal((privacy.match(/href="mailto:constructora\.veta@gmail\.com"/g) || []).length, 2);
+  assert.equal((privacy.match(/href="tel:\+573103964260"/g) || []).length, 2);
+  assert.match(privacy, /href="https:\/\/modulith\.com\.co\/privacidad\/"/);
   assert.match(privacy, /name="robots" content="noindex, nofollow"/);
+  assert.doesNotMatch(privacy, /<script\b|<iframe\b/);
+  assert.match(privacy, /<ol>\s*<li>Recibir y gestionar solicitudes de información/);
+  assert.match(privacy, /<li>Mantener la seguridad y el funcionamiento de los sistemas/);
+});
+
+test('the exact consent links to the full policy without activating capture', () => {
+  const consent = html.match(/<span class="quiz-consent">([\s\S]*?)<\/span><\/span>/)[1];
+  const text = consent.replace(/<[^>]+>/g, '').trim();
+  assert.equal(text, 'Autorizo a MODULITH S.A.S. a tratar mis datos personales y las respuestas de este cuestionario para preparar mi propuesta conceptual, enviármela y contactarme sobre mi proyecto, conforme a la Política de Tratamiento de Datos Personales.');
+  assert.match(consent, /<a href="\/privacidad\/" target="_blank" rel="noopener">Política de Tratamiento de Datos Personales<\/a>/);
+  assert.match(consent, /aria-labelledby="quiz-consent-copy"/);
+  assert.match(consent, /<label for="quiz-consent">[^<]+<\/label><a/);
+  assert.doesNotMatch(consent, /\bchecked\b/);
   assert.match(html, /href="\/privacidad\/" target="_blank" rel="noopener"/);
   assert.match(read('public/app.js'), /if \(link\.getAttribute\('href'\) === '\/privacidad\/'\) return;/);
   assert.doesNotMatch(html + read('public/quiz.js'), /quiz-visual-status|quiz-preview-notice|Vista previa: usa datos ficticios|Todavía no hay activos personalizados generados/);

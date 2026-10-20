@@ -33,7 +33,7 @@ Las antiguas rutas `/preview/` y sus seis variantes se conservan como archivo hi
 
 El quiz funciona en el navegador: ocho pasos, programa de vivienda, referencias visuales, hasta dos materiales, sintesis pre-lead, formulario y validaciones. Nombre, correo, telefono con indicativo, municipio, departamento y consentimiento son obligatorios. La captura y generacion real siguen desactivadas: el adaptador devuelve siempre `disabled`, sin red ni almacenamiento. Tampoco se permiten simulaciones locales de exito. No existe backend conectado ni politica aprobada.
 
-`/privacidad/` es una pagina estatica consultable, claramente pendiente de revision; no es una politica aprobada. Se abre en otra pestana sin perder el formulario. Ver [docs/PRIVACY_REVIEW.md](docs/PRIVACY_REVIEW.md) para los bloqueos legales y operativos. `/contacto/` mantiene su dialogo de destino pendiente. No se inventaron correos ni telefonos empresariales. La coleccion de guias sigue vacia.
+`/privacidad/` contiene los 17 apartados de la politica consolidada suministrada por MODULITH S.A.S., version 1.0 para aprobacion interna, con indice y contactos enlazados. Conserva los pendientes de aprobacion y no habilita captura. Se abre en otra pestana sin perder el formulario. Ver [docs/PRIVACY_REVIEW.md](docs/PRIVACY_REVIEW.md) para los bloqueos legales y operativos. `/contacto/` mantiene su dialogo de destino pendiente. No se inventaron correos ni telefonos empresariales. La coleccion de guias sigue vacia.
 
 ## Comprobaciones
 
